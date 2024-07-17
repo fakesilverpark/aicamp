@@ -45,7 +45,6 @@ if st.session_state.type == '자녀':
          st.write(txt)
          ref = db.reference('main').child(st.session_state.code)
          if ref.get():
-            print(txt)
             ref = ref.child(st.session_state.username)
             if ref.child('request').get():
                ref.child('request').child('present').update({

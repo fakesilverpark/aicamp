@@ -8,7 +8,34 @@ import json
 @st.experimental_dialog("상세 내용")
 def misson_display():
     ref = db.reference('main').child(st.session_state.code).child(st.session_state.username).child('misson')
-    st.header(ref.get())
+    for val,re in ref.get().items():
+        st.header("미션 : "+val)
+        st.subheader("걸린 상품 : "+re['present'])
+        st.write(re['text'])
+        if st.button('미션 완료'):
+            ref = db.reference('main').child(st.session_state.code)
+            if ref.get():
+                ref = ref.child(st.session_state.username)
+                if ref.child('request').get():
+                    ref.child('request').child('present').update({
+                    re['present']:{
+                        'price':0,
+                        'text':'미션 달성'
+                    }
+                })
+                else:
+                    ref.update({
+                        'request':{
+                            'present':{
+                                re['present']:{
+                                    'price':'0',
+                                    'text':'미션 달성'
+                                    }
+                            }
+                        }
+                    })
+                st.success('전송에 성공했어요.')
+                db.reference('main').child(st.session_state.code).child(st.session_state.username).child('misson').delete()
 
 if "username" not in st.session_state:
     st.session_state.username = 'null'
@@ -29,15 +56,19 @@ if st.session_state.type=='부모':
         text = st.text_area('내용',height=5)
         if st.button('미션 보내기'):
             ref = db.reference('main').child(st.session_state.code)
-            if ref.child(name).child('misson').get():
-                st.error('이미 미션을 할당했어요. 이전 미션이 끝난 후 다시 시도해주세요.')
+            if ref.child(name).get():
+                if ref.child(name).child('misson').get():
+                    st.error('이미 미션을 할당했어요. 이전 미션이 끝난 후 다시 시도해주세요.')
+                else:
+                    ref.child(name).child('misson').update({
+                        misson_name:{
+                            'present':present,
+                            'text':text
+                        }
+                    })
+                    st.success('요청을 성공적으로 처리했어요.')
             else:
-                ref.child(name).child('misson').update({
-                    misson_name:{
-                        'present':present,
-                        'text':text
-                    }
-                })
+                st.error('존재하지 않는 유저입니다.')
 elif st.session_state.type=='자녀':
     st.title("Child Dashboard")
     with st.container():
@@ -48,7 +79,10 @@ elif st.session_state.type=='자녀':
         else:
             st.write('0 개')
         if st.button('자세히 보기'):
-            misson_display()
+            if ref:
+                misson_display()
+            else:
+                st.warning('진행중인 미션이 없어요')
     st.divider()
 
     st.write("      ")
