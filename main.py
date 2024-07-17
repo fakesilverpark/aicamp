@@ -8,9 +8,27 @@ if not firebase_admin._apps:#처음 한 번 데이터베이스 불러오기
     key_dict = json.loads(st.secrets["textkey"])
     cred = credentials.Certificate(key_dict)
     firebase_admin.initialize_app(cred, {
-        'databaseURL': 'databaseURL'#데이터베이스 주소 입력
+        'databaseURL': 'https://coin-5f97c-default-rtdb.firebaseio.com/'#데이터베이스 주소 입력
     })
 
+ref = db.reference('main')
+if ref.child('').get():
+    #이미 있음
+    on = 1
+else:
+    ref.set({
+        '가족코드':{
+            '사용자 이름':{
+                'type':'',
+                'request':{
+                    '제목': '가격'
+                }
+            },
+            '내역':{
+                '제목':'가격'
+            }
+        }
+    })
 
 
     
