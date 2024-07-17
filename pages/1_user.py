@@ -47,41 +47,63 @@ if st.session_state.type == 'null':
         st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True) 
         st.caption('처음이시라면 가입, 가족에 참가하시려면 참가 버튼을 눌러주세요.')
         with st.container():
-            if st.button('가입'):
-                ref = db.reference('main')
-                if ref.child(code).get():
-                    st.error('이미 있는 코드입니다.')
-                else:
-                    if ref.child(code).child(name).get():
-                        st.error('이미 있는 이름입니다.')
+            st.write("      ")
+            st.write("      ")
+            col1, col2, col3, col4, col5, col6, col7, col8= st.columns(8)
+            list=[col3, col4, col5, col6, col7, col8]
+
+            for i in list:
+                with i:
+                    st.write("      ")
+            with col1:
+                if st.button('가입'):
+                    ref = db.reference('main')
+                    if ref.child(code).get():
+                        st.error('이미 있는 코드입니다.')
                     else:
-                        ref.update({
-                            code:{
+                        if ref.child(code).child(name).get():
+                            st.error('이미 있는 이름입니다.')
+                        else:
+                            ref.update({
+                                code:{
+                                    name:{
+                                        'type':type,
+                                        'request':{
+                                        }
+                                    },
+                                    'log':{
+                                    }
+                                }
+                            })
+            with col2:
+                if st.button('참가'):
+                    
+                    ref = db.reference('main')
+                    if ref.child(code).get():
+                        if ref.child(code).child(name).get():
+                            st.error('이미 있는 이름입니다.')
+                        else:
+                            ref.child(code).update({
                                 name:{
-                                    'type':type,
-                                    'request':{
+                                        'type':type,
+                                        'request':{
+                                        }
                                     }
-                                },
-                                'log':{
-                                }
-                            }
-                        })
-            if st.button('참가'):
-                
-                ref = db.reference('main')
-                if ref.child(code).get():
-                    if ref.child(code).child(name).get():
-                        st.error('이미 있는 이름입니다.')
+                            })
                     else:
-                        ref.child(code).update({
-                            name:{
-                                    'type':type,
-                                    'request':{
-                                    }
-                                }
-                        })
-                else:
-                    st.error('없는 코드입니다.')
+                        st.error('없는 코드입니다.')
+
+    st.write("      ")
+    st.write("      ")
+    col1, col2, col3, col4, col5, col6, col7, col8= st.columns(8)
+    list=[col1, col2, col3, col4, col5, col6, col7]
+
+    with col8:
+        st.page_link("main.py", label="뒤로가기", icon="👈🏻")
+
+    for i in list:
+        with i:
+            st.write("      ")
 else:
     if st.button('로그아웃'):
         st.session_state.username = 'null'

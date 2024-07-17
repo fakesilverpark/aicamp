@@ -95,3 +95,5 @@ if st.session_state.type == '자녀':
                   }
                })
             st.success('전송에 성공했어요.')
+elif st.session_state.type == '부모':
+   st.error('권한이 부족합니다.')

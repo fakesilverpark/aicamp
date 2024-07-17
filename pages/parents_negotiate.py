@@ -1,4 +1,5 @@
 #부모가 자녀에게 받은 협상을 거절 및 승인하고 그에 대한 이유를 작성 할 수 있음
+import random
 import streamlit as st
 import firebase_admin
 from firebase_admin import credentials
@@ -83,7 +84,7 @@ if st.session_state.type == "부모":
                         if st.button(val+"에게 용돈 보내기"):
                             if ref.child('log').get():
                                 ref.child('log').update({
-                                    val+'-'+name['price']+'-'+"용돈":{
+                                    val+'-'+name['price']+'-'+"용돈"+'-'+random.randint(0, 10000):{
                                             'text':name['text'],
                                             'name':val,
                                             'price':name['price'],
@@ -96,7 +97,7 @@ if st.session_state.type == "부모":
                             else:
                                 ref.update({
                                     'log':{
-                                        val+'-'+name['price']+'-'+"용돈":{
+                                        val+'-'+name['price']+'-'+"용돈"+'-'+random.randint(0, 10000):{
                                             'text':name['text'],
                                             'name':val,
                                             'price':name['price'],
@@ -110,7 +111,7 @@ if st.session_state.type == "부모":
                         if st.button(val+"의 용돈 협상 거절하기"):
                                 if ref.child('log').get():
                                     ref.child('log').update({
-                                        val+'-'+name['price']+'-'+"용돈":{
+                                        val+'-'+name['price']+'-'+"용돈"+'-'+random.randint(0, 10000):{
                                             'text':name['text'],
                                             'name':val,
                                             'price':name['price'],
@@ -123,7 +124,7 @@ if st.session_state.type == "부모":
                                 else:
                                     ref.update({
                                         'log':{
-                                            val+'-'+name['price']+'-'+"용돈":{
+                                            val+'-'+name['price']+'-'+"용돈"+'-'+random.randint(0, 10000):{
                                             'text':name['text'],
                                             'name':val,
                                             'price':name['price'],
