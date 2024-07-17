@@ -4,6 +4,10 @@ from firebase_admin import credentials
 from firebase_admin import db
 import json
 
+st.title("가족과 함께하는 :green[용돈]협상하기!")
+
+st.page_link("pages/all_c_or_p.py", label="시작하기")
+
 if not firebase_admin._apps:#처음 한 번 데이터베이스 불러오기
     key_dict = json.loads(st.secrets["textkey"])
     cred = credentials.Certificate(key_dict)
