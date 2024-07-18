@@ -20,7 +20,8 @@ def misson_display():
                     ref.child('request').child('present').update({
                     re['present']:{
                         'price':0,
-                        'text':'미션 달성'
+                        'text':'미션 달성',
+                        'type':'misson'
                     }
                 })
                 else:
@@ -29,7 +30,8 @@ def misson_display():
                             'present':{
                                 re['present']:{
                                     'price':'0',
-                                    'text':'미션 달성'
+                                    'text':'미션 달성',
+                                    'type':'misson'
                                     }
                             }
                         }
@@ -83,6 +85,30 @@ elif st.session_state.type=='자녀':
                 misson_display()
             else:
                 st.warning('진행중인 미션이 없어요')
+    with st.container(height=450,border=False):
+        st.header('보유중인 쿠폰')
+        ref = db.reference('main').child(st.session_state.code).child(st.session_state.username).child('gift').get()
+        if ref:
+            for val,re in ref.items():
+                with st.container(border=True):
+                    st.header(re)
+                    if st.button(re+'쿠폰 사용'):
+                        st.success('사용하였습니다.')
+                        db.reference('main').child(st.session_state.code).child(st.session_state.username).child('gift').child(val).delete()
+                        st.switch_page('pages/2_dashboard.py')
+    with st.container(height=450,border=False):
+        st.header('거절당한 협상')
+        ref = db.reference('main').child(st.session_state.code).child(st.session_state.username).child('re').get()
+        
+        if ref:
+            for val,re in ref.items():
+                with st.container(border=True):
+                    st.header(val)
+                    st.subheader(val +' - '+re['price']+'원')
+                    st.write(re['text'])
+                    if st.button('확인'):
+                        db.reference('main').child(st.session_state.code).child(st.session_state.username).child('re').child(val).delete()
+                        st.switch_page('pages/2_dashboard.py')
     st.divider()
 
     st.write("      ")

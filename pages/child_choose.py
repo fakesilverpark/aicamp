@@ -50,7 +50,8 @@ if st.session_state.type == '자녀':
                ref.child('request').child('present').update({
                   want:{
                      'price':want_price,
-                     'text':txt
+                     'text':txt,
+                     'type':'present'
                   }
                })
             else:
@@ -59,7 +60,8 @@ if st.session_state.type == '자녀':
                      'present':{
                         want:{
                            'price':want_price,
-                           'text':txt
+                           'text':txt,
+                           'type':'present'
                      }
                      }
                   }

@@ -18,7 +18,7 @@ if st.session_state.type != "null":
     userdump = json.dumps(users)
     userdata = json.loads(userdump)
     if userdata:
-        for val,re in reversed(userdata.items()) :
+        for val,re in userdata.items():
             with st.container(border=True):
                 st.header(re['name'])
                 st.subheader(val)

@@ -4,6 +4,7 @@ import streamlit as st
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
+import time
 import json
 
 
@@ -31,50 +32,98 @@ if st.session_state.type == "부모":
                             st.header(val)
                             st.subheader(val2 +' - '+re2['price']+'원')
                             st.write(re2['text'])
-                            if st.button(val+"에게 선물 보내기"):
-                                if ref.child('log').get():
-                                    ref.child('log').update({
-                                        val2:{
-                                            'text':re2['text'],
-                                            'name':val,
-                                            'type':'acc'
-                                        }
+                            if re2['type']=='misson':
+                                if st.button('수락'):
+                                    ref.child(val).child('gift').update({
+                                        val2:val2
                                     })
-                                else:
-                                    ref.update({
-                                        'log':{
+                                    if ref.child('log').get():
+                                        ref.child('log').update({
                                             val2:{
                                                 'text':re2['text'],
                                                 'name':val,
-                                                'type':'acc'
+                                                'type':'acc',
+                                                'time':time.time()
                                             }
-                                        }
-                                    })
-                                ref.child(val).child('request').child('present').child(val2).delete()
-                                st.switch_page('pages/parents_negotiate.py')
-                            if st.button(val+"의 선물 협상 거절하기"):
-                                if ref.child('log').get():
-                                    ref.child('log').update({
-                                        val2:{
-                                            'text':re2['text'],
-                                            'name':val,
-                                            'price':re2['price'],
-                                            'type':'blo'
-                                        }
-                                    })
-                                else:
-                                    ref.update({
-                                        'log':{
+                                        })
+                                    else:
+                                        ref.update({
+                                            'log':{
+                                                val2:{
+                                                    'text':re2['text'],
+                                                    'name':val,
+                                                    'type':'acc',
+                                                    'time':time.time()
+                                                }
+                                            }
+                                        })
+                                    ref.child(val).child('request').child('present').child(val2).delete()
+                                    st.switch_page('pages/parents_negotiate.py')
+                            else:
+                                if st.button(val+"에게 선물 보내기"):
+                                    if ref.child('log').get():
+                                        ref.child('log').update({
+                                            val2:{
+                                                'text':re2['text'],
+                                                'name':val,
+                                                'type':'acc',
+                                                'time':time.time()
+                                            }
+                                        })
+                                    else:
+                                        ref.update({
+                                            'log':{
+                                                val2:{
+                                                    'text':re2['text'],
+                                                    'name':val,
+                                                    'type':'acc',
+                                                    'time':time.time()
+                                                }
+                                            }
+                                        })
+                                    ref.child(val).child('request').child('present').child(val2).delete()
+                                    st.switch_page('pages/parents_negotiate.py')
+                                if st.button(val+"의 선물 협상 거절하기"):
+                                    if ref.child('log').get():
+                                        ref.child('log').update({
                                             val2:{
                                                 'text':re2['text'],
                                                 'name':val,
                                                 'price':re2['price'],
-                                                'type':'blo'
+                                                'type':'blo',
+                                                'time':time.time()
                                             }
-                                        }
-                                    })
-                                ref.child(val).child('request').child('present').child(val2).delete()
-                                st.switch_page('pages/parents_negotiate.py')
+                                        })
+                                    else:
+                                        ref.update({
+                                            'log':{
+                                                val2:{
+                                                    'text':re2['text'],
+                                                    'name':val,
+                                                    'price':re2['price'],
+                                                    'type':'blo',
+                                                    'time':time.time()
+                                                }
+                                            }
+                                        })
+                                    if ref.child(val).child('re').get():
+                                        ref.child(val).child('re').update({
+                                            val2:{
+                                                    'price':re2['price'],
+                                                    'text':re2['text']
+                                                }
+                                        })
+                                    else:
+                                        ref.child(val).update({
+                                            're':{
+                                                val2:{
+                                                    'price':re2['price'],
+                                                    'text':re2['text']
+                                                }
+                                            }
+                                        })
+                                    ref.child(val).child('request').child('present').child(val2).delete()
+                                    st.switch_page('pages/parents_negotiate.py')
                 name = ref.child(val).child('request').child('money').get()
                 if name!=None:
                     with st.container(border=True):
@@ -84,11 +133,12 @@ if st.session_state.type == "부모":
                         if st.button(val+"에게 용돈 보내기"):
                             if ref.child('log').get():
                                 ref.child('log').update({
-                                    val+'-'+name['price']+'-'+"용돈"+'-'+random.randint(0, 10000):{
+                                    val+'-'+name['price']+'-'+"용돈"+'-'+str(random.randint(0, 10000)):{
                                             'text':name['text'],
                                             'name':val,
                                             'price':name['price'],
-                                            'type':'acc'
+                                            'type':'acc',
+                                            'time':time.time()
                                         }
                                     })
                                 st.success('요청을 성공적으로 처리했어요.')
@@ -101,7 +151,8 @@ if st.session_state.type == "부모":
                                             'text':name['text'],
                                             'name':val,
                                             'price':name['price'],
-                                            'type':'acc'
+                                            'type':'acc',
+                                            'time':time.time()
                                         }
                                     }
                                 })
@@ -115,7 +166,8 @@ if st.session_state.type == "부모":
                                             'text':name['text'],
                                             'name':val,
                                             'price':name['price'],
-                                            'type':'blo'
+                                            'type':'blo',
+                                            'time':time.time()
                                         }
                                     })
                                     st.success('요청을 성공적으로 처리했어요.')
@@ -128,7 +180,8 @@ if st.session_state.type == "부모":
                                             'text':name['text'],
                                             'name':val,
                                             'price':name['price'],
-                                            'type':'blo'
+                                            'type':'blo',
+                                            'time':time.time()
                                         }
                                         }
                                     })
