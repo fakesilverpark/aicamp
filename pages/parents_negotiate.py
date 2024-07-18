@@ -147,7 +147,7 @@ if st.session_state.type == "부모":
                             else:
                                 ref.update({
                                     'log':{
-                                        val+'-'+name['price']+'-'+"용돈"+'-'+random.randint(0, 10000):{
+                                        val+'-'+name['price']+'-'+"용돈"+'-'+str(random.randint(0, 10000)):{
                                             'text':name['text'],
                                             'name':val,
                                             'price':name['price'],
