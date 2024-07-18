@@ -3,4 +3,5 @@ firebase_admin
 openai
 dotenv
 os
+json
 time
