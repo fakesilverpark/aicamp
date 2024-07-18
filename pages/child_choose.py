@@ -11,7 +11,7 @@ import os
 load_dotenv()
 
 API_KEY = os.environ.get('API_KEY')
-client = OpenAI(api_key=API_KEY)
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 
 def callAI(reason,want):
